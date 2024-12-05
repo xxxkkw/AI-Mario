@@ -1,6 +1,8 @@
 from __future__ import division
 
 import pygame
+
+import config
 from .. import setup, tools
 from .. import constants as c
 from .. import game_sound
@@ -540,6 +542,7 @@ class Level1(tools._State):
             if self.mario.invincible:
                 setup.SFX['kick'].play()
                 self.game_info[c.SCORE] += 100
+                config.total_score += 100
                 self.moving_score_list.append(
                     score.Score(self.mario.rect.right - self.viewport.x,
                                 self.mario.rect.y, 100))
@@ -564,7 +567,7 @@ class Level1(tools._State):
         elif powerup:
             if powerup.name == c.STAR:
                 self.game_info[c.SCORE] += 1000
-
+                config.total_score += 1000
                 self.moving_score_list.append(
                     score.Score(self.mario.rect.centerx - self.viewport.x,
                                 self.mario.rect.y, 1000))
@@ -573,6 +576,7 @@ class Level1(tools._State):
             elif powerup.name == c.MUSHROOM:
                 setup.SFX['powerup'].play()
                 self.game_info[c.SCORE] += 1000
+                config.total_score += 1000
                 self.moving_score_list.append(
                     score.Score(self.mario.rect.centerx - self.viewport.x,
                                 self.mario.rect.y - 20, 1000))
@@ -592,6 +596,7 @@ class Level1(tools._State):
             elif powerup.name == c.FIREFLOWER:
                 setup.SFX['powerup'].play()
                 self.game_info[c.SCORE] += 1000
+                config.total_score += 1000
                 self.moving_score_list.append(
                     score.Score(self.mario.rect.centerx - self.viewport.x,
                                 self.mario.rect.y, 1000))
@@ -645,6 +650,7 @@ class Level1(tools._State):
         if shell.state == c.JUMPED_ON:
             if self.mario.rect.x < shell.rect.x:
                 self.game_info[c.SCORE] += 400
+                config.total_score += 400
                 self.moving_score_list.append(
                     score.Score(shell.rect.centerx - self.viewport.x,
                                 shell.rect.y,
@@ -667,6 +673,7 @@ class Level1(tools._State):
                 self.mario.state = c.BIG_TO_SMALL
             elif self.mario.invincible:
                 self.game_info[c.SCORE] += 200
+                config.total_score += 200
                 self.moving_score_list.append(
                     score.Score(shell.rect.right - self.viewport.x,
                                 shell.rect.y, 200))
@@ -745,6 +752,7 @@ class Level1(tools._State):
             if coin_box.state == c.RESTING:
                 if coin_box.contents == c.COIN:
                     self.game_info[c.SCORE] += 200
+                    config.total_score += 200
                     coin_box.start_bump(self.moving_score_list)
                     if coin_box.contents == c.COIN:
                         self.game_info[c.COIN_TOTAL] += 1
@@ -789,6 +797,7 @@ class Level1(tools._State):
                     if brick.coin_total > 0:
                         self.game_info[c.COIN_TOTAL] += 1
                         self.game_info[c.SCORE] += 200
+                        config.total_score += 200
                     self.check_if_enemy_on_brick(brick)
                     brick.start_bump(self.moving_score_list)
             elif brick.state == c.OPENED:
@@ -812,6 +821,7 @@ class Level1(tools._State):
         if enemy:
             setup.SFX['kick'].play()
             self.game_info[c.SCORE] += 100
+            config.total_score += 100
             self.moving_score_list.append(
                 score.Score(enemy.rect.centerx - self.viewport.x,
                             enemy.rect.y,
@@ -873,6 +883,7 @@ class Level1(tools._State):
         if self.mario.y_vel > 0:
             setup.SFX['stomp'].play()
             self.game_info[c.SCORE] += 100
+            config.total_score += 100
             self.moving_score_list.append(
                 score.Score(enemy.rect.centerx - self.viewport.x,
                             enemy.rect.y, 100))
@@ -894,6 +905,7 @@ class Level1(tools._State):
         """Mario collisions with Koopas in their shells on the y axis"""
         if self.mario.y_vel > 0:
             self.game_info[c.SCORE] += 400
+            config.total_score += 400
             self.moving_score_list.append(
                 score.Score(self.mario.rect.centerx - self.viewport.x,
                             self.mario.rect.y, 400))
@@ -996,6 +1008,7 @@ class Level1(tools._State):
         elif coin_box:
             if coin_box.state == c.BUMPED:
                 self.game_info[c.SCORE] += 100
+                config.total_score += 100
                 self.moving_score_list.append(
                     score.Score(enemy.rect.centerx - self.viewport.x,
                                 enemy.rect.y, 100))
@@ -1057,6 +1070,7 @@ class Level1(tools._State):
         if enemy:
             setup.SFX['kick'].play()
             self.game_info[c.SCORE] += 100
+            config.total_score += 100
             self.moving_score_list.append(
                 score.Score(enemy.rect.right - self.viewport.x,
                             enemy.rect.y, 100))
@@ -1264,6 +1278,7 @@ class Level1(tools._State):
         """Kills enemy if hit with fireball"""
         setup.SFX['kick'].play()
         self.game_info[c.SCORE] += 100
+        config.total_score += 100
         self.moving_score_list.append(
             score.Score(enemy.rect.centerx - self.viewport.x,
                         enemy.rect.y,100))
@@ -1339,6 +1354,9 @@ class Level1(tools._State):
             self.persist[c.TOP_SCORE] = self.game_info[c.SCORE]
         if self.mario.dead:
             self.persist[c.LIVES] -= 1
+            config.episodes += 1
+            config.dead = True
+
 
         if self.persist[c.LIVES] == 0:
             self.next = c.GAME_OVER
@@ -1430,5 +1448,4 @@ class Level1(tools._State):
         for score in self.moving_score_list:
             score.draw(surface)
 
-    def get_score(self):
-        return self.game_info[c.SCORE]
+

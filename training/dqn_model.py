@@ -4,6 +4,9 @@ import torch.optim as optim
 import random
 import numpy as np
 import pygame
+import time
+
+import config
 from data.states import level1
 from collections import deque
 
@@ -33,7 +36,7 @@ class DQNAgent:
                  epsilon_decay=0.995, learning_rate=0.00025, buffer_size=10000, batch_size=64,
                  target_update_freq=10):
         self.action_size = action_size  # 动作空间大小
-        self.state_size = state_size  # 状态空间（例如图像输入的尺寸）
+        self.state_size = state_size  # 图像输入的尺寸
         self.gamma = gamma  # 折扣因子，决定长期奖励的权重
         self.epsilon = epsilon  # epsilon-greedy 策略中的 epsilon，控制探索和利用
         self.epsilon_min = epsilon_min  # epsilon 的最小值
@@ -86,23 +89,20 @@ class DQNAgent:
         self.memory.add((state, action, reward, next_state, done))
 
     def act(self, state):
-        """
-        基于 epsilon-greedy 策略选择动作，并将动作映射到 pygame 按键
-        """
-        keys = [False] * 10
         if np.random.rand() <= self.epsilon:
             actions = [0, 1, 2, 3, 4]
             # action jump left right down
-            probabilities = [0.1, 0.2, 0.1, 0.5, 0.1]
+            probabilities = [0, 0.5, 0, 0.5, 0]
             chosen_action = np.random.choice(actions, p=probabilities)
+            config.random_count += 1
         else:
             # 利用模型选择动作
             state = torch.tensor(state, dtype=torch.float).unsqueeze(0).to(self.device)
+            state = state.permute(0, 3, 1, 2)
             q_values = self.model(state)
             chosen_action = torch.argmax(q_values[0]).item()
-        keys[chosen_action] = True
-        return keys
-
+            config.model_count += 1
+        return chosen_action
 
     def replay(self):
         """从回放记忆中采样并训练网络"""
@@ -111,24 +111,28 @@ class DQNAgent:
 
         # 从记忆中随机采样
         minibatch = self.memory.sample(self.batch_size)
-        states = torch.FloatTensor([x[0] for x in minibatch]).to(self.device)
-        actions = [x[1] for x in minibatch]
-        rewards = [x[2] for x in minibatch]
-        next_states = torch.FloatTensor([x[3] for x in minibatch]).to(self.device)
-        dones = [x[4] for x in minibatch]
+
+        # 强制将所有的张量移到同一设备上
+        states_numpy = np.array([x[0] for x in minibatch])
+        next_states_numpy = np.array([x[3] for x in minibatch])
+        states = torch.FloatTensor(states_numpy).permute(0, 3, 1, 2).to(self.device)
+        actions = torch.LongTensor([x[1] for x in minibatch]).to(self.device)  # 动作的原始格式
+        rewards = torch.FloatTensor([x[2] for x in minibatch]).to(self.device)
+        next_states = torch.FloatTensor(next_states_numpy).permute(0, 3, 1, 2).to(self.device)
+        dones = torch.FloatTensor([x[4] for x in minibatch]).to(self.device)
+
+
 
         # 计算目标 Q 值
         target_q_values = self.target_model(next_states)
-        max_target_q_values = torch.max(target_q_values, dim=1)[0]
-        targets = rewards + self.gamma * max_target_q_values * (1 - torch.FloatTensor(dones).to(self.device))
-
-        # 获取当前 Q 值
+        max_target_q_values = torch.max(target_q_values, dim=1)[0]  # 每个样本的最大 Q 值
+        targets = rewards + self.gamma * max_target_q_values * (1 - dones)  # 每个状态下的目标Q值 由 Bellman 方程解得
         current_q_values = self.model(states)
-        current_q_values = current_q_values.gather(1, torch.LongTensor(actions).view(-1, 1).to(self.device))
-
+        actions = actions.reshape(-1, 1)
+        current_q_values = current_q_values.gather(1, actions)
+        targets = targets.reshape(-1, 1)
         # 计算损失
-        loss = nn.MSELoss()(current_q_values, targets.view(-1, 1))
-
+        loss = nn.MSELoss()(current_q_values, targets)
         # 反向传播更新模型
         self.optimizer.zero_grad()
         loss.backward()
@@ -138,4 +142,10 @@ class DQNAgent:
         if self.epsilon > self.epsilon_min:
             self.epsilon *= self.epsilon_decay
 
+    def load(self, name):
+        """加载已保存的模型权重"""
+        self.model.load_state_dict(torch.load(name))
 
+    def save(self, name):
+        """保存模型权重"""
+        torch.save(self.model.state_dict(), name)

@@ -45,14 +45,10 @@ class LoadScreen(tools._State):
         else:
             self.done = True
 
-
-
-
 class GameOver(LoadScreen):
     """A loading screen with Game Over"""
     def __init__(self):
         super(GameOver, self).__init__()
-
 
     def set_next_state(self):
         """Sets next state"""
@@ -76,8 +72,6 @@ class GameOver(LoadScreen):
             surface.fill((106, 150, 252))
         else:
             self.done = True
-
-
 class TimeOut(LoadScreen):
     """Loading Screen with Time Out"""
     def __init__(self):
@@ -103,12 +97,3 @@ class TimeOut(LoadScreen):
             self.overhead_info.draw(surface)
         else:
             self.done = True
-
-
-
-
-
-
-
-
-

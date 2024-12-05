@@ -454,7 +454,7 @@ class Mario(pg.sprite.Sprite):
                 self.facing_right = True
                 self.get_out_of_crouch()
                 self.state = c.WALK
-            elif keys[tools.k['jump']]:
+            elif keys[tools.keybinding['jump']]:
                 if self.allow_jump:
                     if self.big:
                         setup.SFX['big_jump'].play()
