@@ -26,11 +26,11 @@ pip install -r requirements.txt
 ```bash
 
 ├── models/                 # 保存的模型将存储在这里
-│   train.py                # 主要训练脚本
-│   agent.py                # DQN 智能体实现
-│   replay_buffer.py        # 经验回放缓冲区
-│   config.py               # 超参数配置文件
-│   init_env.py             # 马里奥环境设置和包装
+├── train.py                # 主要训练脚本
+├── agent.py                # DQN 智能体实现
+├── replay_buffer.py        # 经验回放缓冲区
+├── config.py               # 超参数配置文件
+├── init_env.py             # 马里奥环境设置和包装
 ├── requirements.txt        # Python 依赖库
 └── README.md               # 项目文档
 ```
