@@ -75,7 +75,6 @@ class ReplayBuffer:
         # 如果概率中有NaN或Inf，替换为均匀分布
         if np.any(np.isnan(probs)) or np.any(np.isinf(probs)):
             probs = np.ones_like(probs) / len(probs)
-
         # 根据计算出的概率采样经验
         indices = np.random.choice(len(self.buffer), batch_size, p=probs)
 
@@ -83,7 +82,6 @@ class ReplayBuffer:
         weights = (len(self.buffer) * probs[indices]) ** (-beta)
         weights = weights / weights.max()  # 归一化权重
         weights = np.array(weights, dtype=np.float32)
-
         # 根据索引获取样本
         sample = [self.buffer[index] for index in indices]
         batch = list(zip(*sample))  # 打包样本，方便后续处理

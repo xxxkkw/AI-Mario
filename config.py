@@ -5,7 +5,6 @@ class Config:
     """
     配置类，用于存储训练过程中使用的超参数以及更新相关信息。
     """
-
     def __init__(self, buffer_size, batch_size):
         # 初始化配置参数
         self.best_reward = -float('inf')  # 记录训练过程中的最佳奖励，初始为负无穷
