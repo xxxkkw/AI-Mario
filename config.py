@@ -90,4 +90,4 @@ class Config:
             self.beta = 0.5
 
         # 使用指数衰减的方式更新epsilon，逐渐减小探索的比例
-        self.epsilon = 0.1 + 0.99 * math.exp(-1.0 * ((self.training_episodes + 1) / 100000))
+        self.epsilon = 0.1 + 0.95 * math.exp(-1.0 * ((self.training_episodes + 1) / 100000))
