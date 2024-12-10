@@ -116,9 +116,8 @@ def init_env(type):
     # 根据环境类型设置渲染模式
     if type == "running":
         # 创建一个带渲染的环境
-        env = gym_super_mario_bros.make("SuperMarioBros-1-1-v0", render_mode="human", apply_api_compatibility=True)
+        env = gym_super_mario_bros.make("SuperMarioBros-1-1-v0", render_mode="rgb_array", apply_api_compatibility=True)
     else:
-        # 创建一个不带渲染的环境
         env = gym_super_mario_bros.make("SuperMarioBros-1-1-v0", render_mode="rgb_array", apply_api_compatibility=True)
 
     # 使用JoypadSpace包装环境，限制动作集为SIMPLE_MOVEMENT
