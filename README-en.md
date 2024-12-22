@@ -1,4 +1,4 @@
-# Super Mario DQN Agent (English Version)
+# Super Mario DQN Agent
 
 This project implements a **DQN** agent to play **Super Mario**. The agent learns to maximize rewards through reinforcement learning and discovers optimal actions in the environment.
 
