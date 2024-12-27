@@ -26,8 +26,6 @@ class DQNAgent(nn.Module):
         self.update_frequency = 1000
         self.batch_size = 128
         self.target_update_freq = 10
-        # self.training_model = self.build_net(input, action_size).to(self.device)
-        # self.target_model = self.build_net(input, action_size).to(self.device)
         # 优化器
 
         self.online = nn.Sequential(

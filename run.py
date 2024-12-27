@@ -7,7 +7,6 @@ import cv2
 
 
 def test_case(agent, level):
-    type = "running"
     env = init_env(level)
     state, _ = env.reset()
     done = False
@@ -27,7 +26,6 @@ def run_model(level):
     env = init_env(level)
     state, _ = env.reset()
     done = False
-    win = False
     model_path = f"final_model{level}.dat"
     agent = DQNAgent(config, (4, 84, 84), env.action_space.n, model_path)
     target_fps = 60
@@ -35,7 +33,9 @@ def run_model(level):
     while not done:
         start_time = time.time()
         img = cv2.cvtColor(env.render(), cv2.COLOR_RGB2BGR)
-        cv2.imshow("Mario", img)
+        width, height = 450, 450
+        img_resized = cv2.resize(img, (width, height))
+        cv2.imshow("Mario", img_resized)
         cv2.waitKey(int(frame_delay * 1000))
         action = agent.agent_act(state)
         state, reward, done, trunc, info = env.step(action)

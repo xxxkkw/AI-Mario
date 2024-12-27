@@ -27,7 +27,6 @@ def train(config, env, replay_buffer, agent, mode, level):
         win = False
         is_best = False
         step = 0
-        count = 0
         while True:
             step += 1
             config.update(replay_buffer,mode)
@@ -66,7 +65,6 @@ def train(config, env, replay_buffer, agent, mode, level):
                       f"Epsilon: {config.epsilon:10.4f} | Avg Reward (last 20): {avg_recent_reward:10.4f} | "
                       f"Best Reward?: {is_best} | Best Reward So Far: {config.best_reward:10.4f}")
 
-
                 if episode % 20 == 0 or win:
                     if test_case(agent, level):
                         print("test pass")
@@ -84,7 +82,6 @@ def train(config, env, replay_buffer, agent, mode, level):
                 plt.pause(0.01)
 
                 break
-
     plt.ioff()
     plt.show()
 
@@ -106,3 +103,4 @@ if __name__ == '__main__':
         mode = "train"
     agent = DQNAgent(config, (4, 84, 84), env.action_space.n, pre_train_model)
     train(config, env, replay_buffer, agent, mode, args.level)
+
