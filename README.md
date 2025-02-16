@@ -47,13 +47,15 @@ python train.py
 ```bash
 python train.py --level 1-1
 ```
-或者已经把某个模型训练到了一半，想继续训练，只需
-```bash
-python train.py --model path_to_your_model
-```
+![示例图片](./images/Level_1-1.PNG)
 此外，项目内置两个关卡的模型，1-1以及1-2，可以体验一下
 ```bash
 python run.py --level 1-2
+```
+![示例图片](./images/Level_1-2.PNG)
+或者已经把某个模型训练到了一半，想继续训练，只需
+```bash
+python train.py --model path_to_your_model
 ```
 玩的开心！
 
