@@ -1,3 +1,4 @@
+[Read this in English](README-en.md)
 # 超级马里奥 DQN 智能体
 
 该项目实现了一个使用 **DQN** 的智能体来玩 **超级马里奥**。智能体通过强化学习来最大化奖励，并学习在环境中采取最优动作。
@@ -58,5 +59,3 @@ python run.py --level 1-2
 python train.py --model path_to_your_model
 ```
 玩的开心！
-
-[Read this in English](README-en.md)
