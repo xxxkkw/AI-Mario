@@ -1,3 +1,4 @@
+[中文版](README.md)
 # Super Mario DQN Agent
 
 This project implements a **DQN** agent to play **Super Mario**. The agent learns to maximize rewards through reinforcement learning and discovers optimal actions in the environment.
@@ -44,15 +45,16 @@ If you want to train the model from scratch, use the `--level` argument to speci
 ```bash
 python train.py --level 1-1
 ```
-If you have a partially trained model and want to continue training, use the `--model` argument to specify the path to your model:
-```
-python train.py --model path_to_your_model
-```
+![sample picture](./images/Level_1-1.PNG)
 There are two pre-trained models for levels 1-1 and 1-2. To play level 1-2, for example, run:
 ```bash
 python run.py --level 1-2
 ```
+![sample picture](./images/Level_1-2.PNG)
+If you have a partially trained model and want to continue training, use the `--model` argument to specify the path to your model:
+```
+python train.py --model path_to_your_model
+```
 Enjoy playing!
 
-[中文版](README.md)
 

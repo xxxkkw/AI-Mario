@@ -18,7 +18,7 @@ git clone https://github.com/xxxkkw/AI-Mario.git
 ```bash
 pip install -r requirements.txt
 ```
-注：这里一定严格按照环境内的版本，要不然有bug
+注：这里一定严格按照环境内的版本，否则有bug
 ### 文件结构
 
 ```bash
